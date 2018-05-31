@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .box-container {
+    position:relative;
+    overflow: hidden;
+    width: 120px;
+  }
+  .box {
+    width: 100px;
+    height: 40px;
+    background-color: #fff;
+  }
+  .shadow-inset {
+    box-shadow:0px 0px 10px #999 inset;
+  }
+  .shadow-outset {
+    box-shadow:0px 0px 10px #999 inset;
+  }
+  .rotate {
+    transform: rotate(118deg);
+  }
+  .pull-left {
+    float: left;
+  }
+  .pos-abos {
+    position: absolute;
+  }
+  .left-60 {
+    left: 60px;
+  }
+  .height-60 {
+    height: 60px;
+  }
+  </style>
+</head>
+<body>
+  <div class="box-container">
+    <div class="box shadow-inset pull-left"></div>
+    <div class="box shadow-outset pos-abos rotate left-60 height-60"></div>
+  </div>
+</body>
+</html>
