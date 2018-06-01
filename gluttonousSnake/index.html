@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      html, body {
+        height: 100%;
+        margin: 0px;
+      }
+      .container {
+        position: absolute;
+        height: 600px;
+        width: 600px;
+        background: -webkit-linear-gradient(top, transparent 9px, #000 10px),
+        -webkit-linear-gradient(left, transparent 9px, #000 10px);
+        background-size: 10px 10px;
+        border-top: 1px solid #000;
+        border-left: 1px solid #000;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+      .dot {
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        background: #000;
+        left: 1px;
+        top: 1px;
+      }
+      .snake-child {
+        position: absolute;
+        width: 9px;
+        height: 9px;
+        background: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="dot"></div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    var dot = document.getElementsByClassName('dot')[0];
+    var container = document.getElementsByClassName('container')[0];
+    var inter = null;
+    var snakeArr = [];
+    function getNewDotPos() {
+      var pos = [getRandom(60), getRandom(60)];
+      dot.style.top = `${1 + pos[1] * 10}px`;
+      dot.style.left = `${1 + pos[0] * 10}px`;
+    }
+
+    function snakeMove() {
+      clearInterval(inter);
+      inter = setInterval(function() {
+        snakeArr.map(item => {
+          removeSnakeChildPos(item.id);
+          item.pos = [item.pos[0] + 1, item.pos[1]];
+          renderSnakeChildPos(item.id, item.pos);
+        });
+      }, 500);
+    }
+
+    function removeSnakeChildPos(id) {
+      var snakeChild = document.getElementById(id);
+      container.removeChild(snakeChild);
+    }
+
+    function renderSnakeChildPos(id, pos) {
+      var childDiv = document.createElement('div');
+      childDiv.setAttribute('class', 'snake-child');
+      childDiv.setAttribute('id', id);
+      container.appendChild(childDiv);
+      var child = document.getElementById(id);
+      child.style.top = `${pos[1] * 10}px`;
+      child.style.left = `${pos[0] * 10}px`;
+    }
+
+    function getRandom(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+    function guid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+      });
+    }
+
+    function initSnake() {
+      snakeArr.push({
+        id: guid(),
+        pos: [
+          getRandom(60)  ? getRandom(60) : 1,
+          getRandom(60)
+        ]
+      });
+      snakeArr.push({
+        id: guid(),
+        pos: [
+          snakeArr[0].pos[0] - 1,
+          snakeArr[0].pos[1]
+        ]
+      });
+      snakeArr.map(item => {
+        renderSnakeChildPos(item.id, item.pos);
+      });
+    }
+
+    initSnake();
+    snakeMove();
+  </script>
+</html>
