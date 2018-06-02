@@ -49,26 +49,54 @@
     var container = document.getElementsByClassName('container')[0];
     var inter = null;
     var snakeArr = [];
+    var moveDirection = [1, 0];
+    var dotPos = [];
+
     function getNewDotPos() {
-      var pos = [getRandom(60), getRandom(60)];
-      dot.style.top = `${1 + pos[1] * 10}px`;
-      dot.style.left = `${1 + pos[0] * 10}px`;
+      dotPos = [getRandom(60), getRandom(60)];
+      dot.style.top = `${1 + dotPos[1] * 10}px`;
+      dot.style.left = `${1 + dotPos[0] * 10}px`;
     }
 
     function snakeMove() {
       clearInterval(inter);
       inter = setInterval(function() {
+        var targetPos = [snakeArr[0].pos[0] + moveDirection[0], snakeArr[0].pos[1] + moveDirection[1]];
+        if (ifDead(targetPos)) {
+          return;
+        }
+        ifEatSomething(targetPos);
         snakeArr.map(item => {
+          let tmpPos = item.pos;
+          item.pos = targetPos;
+          targetPos = tmpPos;
           removeSnakeChildPos(item.id);
-          item.pos = [item.pos[0] + 1, item.pos[1]];
           renderSnakeChildPos(item.id, item.pos);
         });
-      }, 500);
+      }, 50);
+    }
+
+    function ifEatSomething(pos) {
+      if (JSON.stringify(pos) === JSON.stringify(dotPos)) {
+        snakeIncrease();
+        getNewDotPos();
+      }
+    }
+
+    function snakeIncrease() {
+      let length = snakeArr.length;
+      snakeArr.push({
+        id: guid(),
+        pos: []
+      });
+
     }
 
     function removeSnakeChildPos(id) {
       var snakeChild = document.getElementById(id);
-      container.removeChild(snakeChild);
+      if (snakeChild) {
+        container.removeChild(snakeChild);
+      }
     }
 
     function renderSnakeChildPos(id, pos) {
@@ -92,11 +120,11 @@
       });
     }
 
-    function initSnake() {
+    function initSnake(max) {
       snakeArr.push({
         id: guid(),
         pos: [
-          getRandom(60)  ? getRandom(60) : 1,
+          getRandom(60) < max  ? getRandom(60) : max,
           getRandom(60)
         ]
       });
@@ -107,12 +135,71 @@
           snakeArr[0].pos[1]
         ]
       });
+      snakeArr.push({
+        id: guid(),
+        pos: [
+          snakeArr[0].pos[0] - 2,
+          snakeArr[0].pos[1]
+        ]
+      });
+      snakeArr.push({
+        id: guid(),
+        pos: [
+          snakeArr[0].pos[0] - 3,
+          snakeArr[0].pos[1]
+        ]
+      });
+      snakeArr.push({
+        id: guid(),
+        pos: [
+          snakeArr[0].pos[0] - 4,
+          snakeArr[0].pos[1]
+        ]
+      });
       snakeArr.map(item => {
         renderSnakeChildPos(item.id, item.pos);
       });
     }
 
-    initSnake();
+    function mouseEvent() {
+      document.onkeydown = function() {
+        if (event.keyCode == 37 && moveDirection[0] !== 1) {
+          moveDirection = [-1, 0];
+        } else if (event.keyCode == 38 && moveDirection[1] !== 1) {
+          moveDirection = [0, -1];
+        } else if (event.keyCode == 39 && moveDirection[0] !== -1) {
+          moveDirection = [1, 0];
+        } else if (event.keyCode == 40 && moveDirection[1] !== -1) {
+          moveDirection = [0, 1];
+        }
+      };
+    }
+
+    function ifDead(pos) {
+      if (pos[0] < 0 || pos[0] > 59 || pos[1] < 0 || pos[1] > 59 || ifBitSelf(pos)) {
+        clearInterval(inter);
+        snakeArr.map(item => {
+          removeSnakeChildPos(item.id);
+        });
+        alert("dead！");
+        return true;
+      }
+      return false;
+    }
+
+    function ifBitSelf(pos) {
+      var length = snakeArr.length;
+      for (var i = 4; i < snakeArr.length; i++) {
+        if (JSON.stringify(snakeArr[i - 1].pos) === JSON.stringify(pos)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    getNewDotPos();
+    initSnake(5);
     snakeMove();
+    mouseEvent();
   </script>
 </html>
