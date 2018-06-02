@@ -73,7 +73,7 @@
           removeSnakeChildPos(item.id);
           renderSnakeChildPos(item.id, item.pos);
         });
-      }, 50);
+      }, 200);
     }
 
     function ifEatSomething(pos) {
@@ -196,6 +196,7 @@
     }
 
     function clearBox() {
+      moveDirection = [1, 0];
       clearInterval(inter);
       snakeArr.map(item => {
         removeSnakeChildPos(item.id);
