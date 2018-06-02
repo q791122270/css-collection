@@ -113,6 +113,18 @@
       return Math.floor(Math.random() * max);
     }
 
+    function showConfirm() {
+      var r = confirm('游戏结束，是否重新开始');
+      if (r) {
+        clearBox();
+        getNewDotPos();
+        initSnake(5);
+        snakeMove();
+      } else {
+        clearBox();
+      }
+    }
+
     function guid() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -177,14 +189,18 @@
 
     function ifDead(pos) {
       if (pos[0] < 0 || pos[0] > 59 || pos[1] < 0 || pos[1] > 59 || ifBitSelf(pos)) {
-        clearInterval(inter);
-        snakeArr.map(item => {
-          removeSnakeChildPos(item.id);
-        });
-        alert("dead！");
+        showConfirm();
         return true;
       }
       return false;
+    }
+
+    function clearBox() {
+      clearInterval(inter);
+      snakeArr.map(item => {
+        removeSnakeChildPos(item.id);
+      });
+      snakeArr = [];
     }
 
     function ifBitSelf(pos) {
