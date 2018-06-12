@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      .ball {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        background-color: #FF5722;
+        margin: 0 auto;
+        margin-top: 200px;
+        animation: jump-ball 2s infinite;
+        animation-timing-function: cubic-bezier(0, 0, 0.75, 0.08);
+        animation-direction: alternate;
+      }
+      @keyframes jump-ball {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(400px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ball">
+
+    </div>
+  </body>
+</html>
